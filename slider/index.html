@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>CodePen - Full-Screen Responsive Image Slider with Captions</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css' />
+  <meta charset="UTF-8">
+  <title>Responsive Image Slider with Captions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
 
@@ -25,6 +25,9 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .slide {
@@ -35,68 +38,43 @@
       height: 100%;
       opacity: 0;
       transition: opacity 0.4s ease-in-out;
-      background-position: center top;
-      background-repeat: no-repeat;
-      background-size: cover;
       display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding-left: 2rem;
-      padding-bottom: 2rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      pointer-events: none;
     }
 
     .slide.current {
       opacity: 1;
-      z-index: 1;
+      z-index: 2;
+      pointer-events: auto;
     }
 
-    .slide:first-child {
-      background-image: url("1.png");
+    .slide-image {
+      width: 100%;
+      height: 80vh;
+      object-fit: cover;
+      display: block;
+      border-bottom: 2px solid #e5ebf3;
     }
 
-    .slide:nth-child(2) {
-      background-image: url("2.png");
-    }
-
-    .slide:nth-child(3) {
-      background-image: url("3.png");
-    }
-
-    /* Caption styling */
-    .slide .content {
-      max-width: 600px;
-      background-color: rgba(54, 42, 43, 0.7);
-      padding: 1.5rem 2rem;
-      border-radius: 8px;
-      opacity: 0;
-      transform: translateX(-600px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+    .caption {
+      background: rgba(30,28,28, 0.83);
       color: #e5ebf3;
+      width: 100%;
+      text-align: center;
+      padding: 1.2rem 0 1.4rem 0;
+      font-size: 1.18rem;
+      letter-spacing: .02em;
+      border-bottom: 2px solid #e5ebf3;
     }
-
-    .slide.current .content {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .slide .content h1 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .slide .content p {
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    /* Buttons */
 
     .buttons button#prev {
       position: absolute;
       top: 50%;
       left: 1rem;
       transform: translateY(-50%);
-      z-index: 2;
     }
 
     .buttons button#next {
@@ -104,7 +82,6 @@
       top: 50%;
       right: 1rem;
       transform: translateY(-50%);
-      z-index: 2;
     }
 
     .buttons button {
@@ -115,8 +92,7 @@
       padding: 13px 15px;
       border-radius: 50%;
       outline: none;
-      font-size: 1.2rem;
-      transition: background-color 0.3s, color 0.3s;
+      z-index: 10;
     }
 
     .buttons button:hover {
@@ -124,16 +100,22 @@
       color: #362a2b;
     }
 
-    @media (min-width: 640px) and (min-height: 640px) {
-      .slide .content {
-        bottom: 70px;
-        left: 2rem;
-        width: 600px;
-        padding: 2rem;
+    @media (max-width: 800px) {
+      .slide-image {
+        height: 60vh;
       }
-
-      .slide .content h1 {
-        font-size: 2rem;
+      .caption {
+        font-size: 1rem;
+        padding: 1rem 0;
+      }
+    }
+    @media (max-width: 500px) {
+      .slide-image {
+        height: 45vh;
+      }
+      .caption {
+        font-size: 0.98rem;
+        padding: 0.8rem 0 1rem 0;
       }
     }
   </style>
@@ -142,28 +124,21 @@
 <body>
   <div class="slider">
     <div class="slide current">
-      <div class="content">
-        <h1>Caption Title 1</h1>
-        <p>Le icone che ho scelto riprendono in gran parte quelle originali di Acumen Academy, integrandole dove necessario con soluzioni simili o nuove aggiunte personali. 
-Oltre alla funzionalità e riconoscibilità, mi sono concentrata anche sulla coerenza visiva, creando una griglia dedicata per creare formati standard da 16, 24 e 32 pixel, così da garantire uniformità in tutta l’interfaccia.</p>
-      </div>
+      <img src="1.png" alt="Slide 1" class="slide-image" />
+      <div class="caption">Le icone che ho scelto riprendono in gran parte quelle originali di Acumen Academy, integrandole dove necessario con soluzioni simili o nuove aggiunte personali. 
+Oltre alla funzionalità e riconoscibilità, mi sono concentrata anche sulla coerenza visiva, creando una griglia dedicata per creare formati standard da 16, 24 e 32 pixel, così da garantire uniformità in tutta l’interfaccia.</div>
     </div>
     <div class="slide">
-      <div class="content">
-        <h1>Caption Title 2</h1>
-        <p>Per migliorare la coerenza visiva e risolvere i problemi emersi nelle analisi precedenti, ho scelto come base i colori del logo di Acumen Academy: il blu (primario) e il viola (secondario), da cui ho creato varianti per elementi come Card, Footer e stati dei componenti. Ho aggiunto anche verde acqua per i successi e rosso per gli errori, usando nero e bianco puri per testo e sfondi. 
-Sia su Desktop che su Mobile, la palette rispecchia sempre l’identità del brand, ma nella versione Mobile ho reso alcune tonalità leggermente più luminose e contrastate rispetto al desktop, mantenendo così tutto chiaro, leggibile e accessibile su ogni dispositivo.</p>
-      </div>
+      <img src="2.png" alt="Slide 2" class="slide-image" />
+      <div class="Per migliorare la coerenza visiva e risolvere i problemi emersi nelle analisi precedenti, ho scelto come base i colori del logo di Acumen Academy: il blu (primario) e il viola (secondario), da cui ho creato varianti per elementi come Card, Footer e stati dei componenti. Ho aggiunto anche verde acqua per i successi e rosso per gli errori, usando nero e bianco puri per testo e sfondi. 
+Sia su Desktop che su Mobile, la palette rispecchia sempre l’identità del brand, ma nella versione Mobile ho reso alcune tonalità leggermente più luminose e contrastate rispetto al desktop, mantenendo così tutto chiaro, leggibile e accessibile su ogni dispositivo.</div>
     </div>
     <div class="slide">
-      <div class="content">
-        <h1>Caption Title 3</h1>
-        <p>La griglia è rimasta invariata a quella già definita nella fase precedente (Wireframing). 
-Per la versione Desktop, ho scelto una struttura a 12 colonne, tipo stretch, con margini da 70 px e gutter da 20 px. Mentre per la versione Mobile, le colonne sono state ridimensionate a 4, il margine a 35 px ma mantenuto il tipo Stretch e il gutter da 20 px. </p>
-      </div>
+      <img src="3.png" alt="Slide 3" class="slide-image" />
+      <div class="caption">La griglia è rimasta invariata a quella già definita nella fase precedente (Wireframing). 
+Per la versione Desktop, ho scelto una struttura a 12 colonne, tipo stretch, con margini da 70 px e gutter da 20 px. Mentre per la versione Mobile, le colonne sono state ridimensionate a 4, il margine a 35 px ma mantenuto il tipo Stretch e il gutter da 20 px.</div>
     </div>
   </div>
-
   <div class="buttons">
     <button id="prev"><i class="fas fa-arrow-left"></i></button>
     <button id="next"><i class="fas fa-arrow-right"></i></button>
@@ -178,9 +153,9 @@ Per la versione Desktop, ho scelto una struttura a 12 colonne, tipo stretch, con
     let slideInterval;
 
     const nextSlide = () => {
-      const current = document.querySelector(".current");
+      const current = document.querySelector(".slide.current");
       current.classList.remove("current");
-      if (current.nextElementSibling) {
+      if (current.nextElementSibling && current.nextElementSibling.classList.contains("slide")) {
         current.nextElementSibling.classList.add("current");
       } else {
         slides[0].classList.add("current");
@@ -188,9 +163,9 @@ Per la versione Desktop, ho scelto una struttura a 12 colonne, tipo stretch, con
     };
 
     const prevSlide = () => {
-      const current = document.querySelector(".current");
+      const current = document.querySelector(".slide.current");
       current.classList.remove("current");
-      if (current.previousElementSibling) {
+      if (current.previousElementSibling && current.previousElementSibling.classList.contains("slide")) {
         current.previousElementSibling.classList.add("current");
       } else {
         slides[slides.length - 1].classList.add("current");
