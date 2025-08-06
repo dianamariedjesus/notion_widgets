@@ -2,123 +2,173 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>CodePen - Full-Screen Responsive Image Slider</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
-  <link rel="stylesheet" href="./style.css">
-<style>
-  @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
+  <meta charset="UTF-8" />
+  <title>CodePen - Full-Screen Responsive Image Slider with Captions</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css' />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: "Lexend", sans-serif;
-  background-color: #362a2b;
-  color: #e5ebf3;
-}
+    body {
+      font-family: "Lexend", sans-serif;
+      background-color: #362a2b;
+      color: #e5ebf3;
+    }
 
-.slider {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
+    .slider {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-.slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.4s ease-in-out;
-}
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding-left: 2rem;
+      padding-bottom: 2rem;
+    }
 
-.slide.current {
-  opacity: 1;
-}
+    .slide.current {
+      opacity: 1;
+      z-index: 1;
+    }
 
+    .slide:first-child {
+      background-image: url("1.png");
+    }
 
-.slide:first-child {
-  background: url("1.png") no-repeat
-    center top/cover;
-}
+    .slide:nth-child(2) {
+      background-image: url("2.png");
+    }
 
-.slide:nth-child(2) {
-  background: url("2.png") no-repeat
-    center top/cover;
-}
+    .slide:nth-child(3) {
+      background-image: url("3.png");
+    }
 
-.slide:nth-child(3) {
-  background: url("3.png") no-repeat
-    center top/cover;
-}
+    /* Caption styling */
+    .slide .content {
+      max-width: 600px;
+      background-color: rgba(54, 42, 43, 0.7);
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateX(-600px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      color: #e5ebf3;
+    }
 
+    .slide.current .content {
+      opacity: 1;
+      transform: translateX(0);
+    }
 
-.buttons button#prev {
-  position: absolute;
-  top: 50%;
-  left: 1rem;
-}
+    .slide .content h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
 
-.buttons button#next {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-}
+    .slide .content p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
 
-.buttons button {
-  border: 2px solid #e5ebf3;
-  background-color: transparent;
-  color: #e5ebf3;
-  cursor: pointer;
-  padding: 13px 15px;
-  border-radius: 50%;
-  outline: none;
-}
+    /* Buttons */
 
-.buttons button:hover {
-  background-color: #e5ebf3;
-  color: #362a2b;
-}
+    .buttons button#prev {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
 
-@media (min-width: 640px) and (min-height: 640px) {
-  .slide .content {
-    bottom: 70px;
-    left: -600px;
-    width: 600px;
-    padding: 2rem;
-    line-height: 1.6;
-  }
+    .buttons button#next {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
 
-  .slide .content h1 {
-    font-size: 2rem;
-  }
+    .buttons button {
+      border: 2px solid #e5ebf3;
+      background-color: transparent;
+      color: #e5ebf3;
+      cursor: pointer;
+      padding: 13px 15px;
+      border-radius: 50%;
+      outline: none;
+      font-size: 1.2rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
 
-  .slide.current .content {
-    transform: translateX(600px);
-  }
-}
-</style>
+    .buttons button:hover {
+      background-color: #e5ebf3;
+      color: #362a2b;
+    }
+
+    @media (min-width: 640px) and (min-height: 640px) {
+      .slide .content {
+        bottom: 70px;
+        left: 2rem;
+        width: 600px;
+        padding: 2rem;
+      }
+
+      .slide .content h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- partial:index.partial.html -->
   <div class="slider">
-    <div class="slide current"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-
+    <div class="slide current">
+      <div class="content">
+        <h1>Caption Title 1</h1>
+        <p>Le icone che ho scelto riprendono in gran parte quelle originali di Acumen Academy, integrandole dove necessario con soluzioni simili o nuove aggiunte personali. 
+Oltre alla funzionalità e riconoscibilità, mi sono concentrata anche sulla coerenza visiva, creando una griglia dedicata per creare formati standard da 16, 24 e 32 pixel, così da garantire uniformità in tutta l’interfaccia.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="content">
+        <h1>Caption Title 2</h1>
+        <p>Per migliorare la coerenza visiva e risolvere i problemi emersi nelle analisi precedenti, ho scelto come base i colori del logo di Acumen Academy: il blu (primario) e il viola (secondario), da cui ho creato varianti per elementi come Card, Footer e stati dei componenti. Ho aggiunto anche verde acqua per i successi e rosso per gli errori, usando nero e bianco puri per testo e sfondi. 
+Sia su Desktop che su Mobile, la palette rispecchia sempre l’identità del brand, ma nella versione Mobile ho reso alcune tonalità leggermente più luminose e contrastate rispetto al desktop, mantenendo così tutto chiaro, leggibile e accessibile su ogni dispositivo.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="content">
+        <h1>Caption Title 3</h1>
+        <p>La griglia è rimasta invariata a quella già definita nella fase precedente (Wireframing). 
+Per la versione Desktop, ho scelto una struttura a 12 colonne, tipo stretch, con margini da 70 px e gutter da 20 px. Mentre per la versione Mobile, le colonne sono state ridimensionate a 4, il margine a 35 px ma mantenuto il tipo Stretch e il gutter da 20 px. </p>
+      </div>
+    </div>
   </div>
+
   <div class="buttons">
     <button id="prev"><i class="fas fa-arrow-left"></i></button>
     <button id="next"><i class="fas fa-arrow-right"></i></button>
   </div>
-  <!-- partial -->
+
   <script>
     const slides = document.querySelectorAll(".slide");
     const nextButton = document.getElementById("next");
@@ -154,6 +204,7 @@ body {
         slideInterval = setInterval(nextSlide, intervalTime);
       }
     });
+
     prevButton.addEventListener("click", () => {
       prevSlide();
       if (auto) {
@@ -165,9 +216,7 @@ body {
     if (auto) {
       slideInterval = setInterval(nextSlide, intervalTime);
     }
-
   </script>
-
 </body>
 
 </html>
