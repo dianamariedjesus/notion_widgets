@@ -2,59 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Full-Screen Responsive Image Slider</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      width: 100%;
-      overflow: auto;
-    }
     body {
       font-family: "Lexend", sans-serif;
       background-color: #362a2b;
       color: #e5ebf3;
-      height: 100%;
-      width: 100%;
     }
     .slider {
       position: relative;
       width: 100vw;
+      height: auto;
       overflow: auto;
     }
     .slide {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%; height: auto;
       opacity: 0;
       transition: opacity 0.4s ease-in-out;
-      background-size: cover;
-      background-position: center top;
-      background-repeat: no-repeat;
     }
-    .slide.current { opacity: 1; z-index: 1; }
-    .slide:first-child { background-image: url("1.png"); }
-    .slide:nth-child(2) { background-image: url("2.png"); }
-    .slide:nth-child(3) { background-image: url("3.png"); }
-    .slide:nth-child(4) { background-image: url("4.png"); }
-    .slide:nth-child(5) { background-image: url("5.png"); }
-
-    /* Buttons (now inside .slider) */
-    .buttons {
-      position: absolute;
-      width: 100%;
-      top: 0; left: 0;
-      height: 100%;
-      pointer-events: none;
-      z-index: 2;
+    .slide.current { opacity: 1; }
+    .slide:first-child {
+      background: url("1.png") no-repeat center top/cover;
+    }
+    .slide:nth-child(2) {
+      background: url("2.png") no-repeat center top/cover;
+    }
+    .slide:nth-child(3) {
+      background: url("3.png") no-repeat center top/cover;
+    }
+    .slide:nth-child(4) {
+      background: url("4.png") no-repeat center top/cover;
+    }
+    .buttons button#prev {
+      position: absolute; top: 50%; left: 1rem;
+    }
+    .buttons button#next {
+      position: absolute; top: 50%; right: 1rem;
     }
     .buttons button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
       border: 2px solid #e5ebf3;
       background-color: transparent;
       color: #e5ebf3;
@@ -62,67 +52,62 @@
       padding: 13px 15px;
       border-radius: 50%;
       outline: none;
-      font-size: 1.2rem;
-      pointer-events: auto;
-      transition: background 0.2s, color 0.2s;
     }
-    .buttons button#prev { left: 1.5rem; }
-    .buttons button#next { right: 1.5rem; }
-    .buttons button:hover, .buttons button:focus {
+    .buttons button:hover {
       background-color: #e5ebf3;
       color: #362a2b;
     }
-    /* Responsive fix for small screens */
-    @media (max-width: 450px) {
-      .buttons button {
-        font-size: 1rem;
-        padding: 10px 11px;
+    @media (min-width: 640px) and (min-height: 640px) {
+      .slide .content {
+        bottom: 70px;
+        left: -600px;
+        width: 600px;
+        padding: 2rem;
+        line-height: 1.6;
       }
-      .buttons button#prev, .buttons button#next { left: 0.5rem; right: 0.5rem; }
+      .slide .content h1 { font-size: 2rem; }
+      .slide.current .content { transform: translateX(600px); }
     }
   </style>
 </head>
 <body>
   <div class="slider">
-    <div class="slide current" aria-label="Slide 1"></div>
-    <div class="slide" aria-label="Slide 2"></div>
-    <div class="slide" aria-label="Slide 3"></div>
-    <div class="slide" aria-label="Slide 4"></div>
-    <div class="slide" aria-label="Slide 5"></div>
-    <div class="buttons">
-      <button id="prev" aria-label="Previous Slide"><i class="fas fa-arrow-left"></i></button>
-      <button id="next" aria-label="Next Slide"><i class="fas fa-arrow-right"></i></button>
-    </div>
+    <div class="slide current"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+  </div>
+  <div class="buttons">
+    <button id="prev"><i class="fas fa-arrow-left"></i></button>
+    <button id="next"><i class="fas fa-arrow-right"></i></button>
   </div>
   <script>
     const slides = document.querySelectorAll(".slide");
     const nextButton = document.getElementById("next");
     const prevButton = document.getElementById("prev");
 
-    let currentIdx = 0;
+    const nextSlide = () => {
+      const current = document.querySelector(".current");
+      current.classList.remove("current");
+      if (current.nextElementSibling && current.nextElementSibling.classList.contains('slide')) {
+        current.nextElementSibling.classList.add("current");
+      } else {
+        slides[0].classList.add("current");
+      }
+    };
 
-    function showSlide(idx) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle("current", i === idx);
-      });
-    }
-    function nextSlide() {
-      currentIdx = (currentIdx + 1) % slides.length;
-      showSlide(currentIdx);
-    }
-    function prevSlide() {
-      currentIdx = (currentIdx - 1 + slides.length) % slides.length;
-      showSlide(currentIdx);
-    }
+    const prevSlide = () => {
+      const current = document.querySelector(".current");
+      current.classList.remove("current");
+      if (current.previousElementSibling && current.previousElementSibling.classList.contains('slide')) {
+        current.previousElementSibling.classList.add("current");
+      } else {
+        slides[slides.length - 1].classList.add("current");
+      }
+    };
 
     nextButton.addEventListener("click", nextSlide);
     prevButton.addEventListener("click", prevSlide);
-
-    // Optional: allow arrow keys for navigation
-    document.addEventListener('keydown', function(evt){
-      if (evt.key === "ArrowRight") nextSlide();
-      if (evt.key === "ArrowLeft") prevSlide();
-    });
   </script>
 </body>
 </html>
