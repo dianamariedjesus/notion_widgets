@@ -2,52 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- FIX 1: Added the crucial viewport meta tag for responsive behavior -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Full-Screen Responsive Image Slider</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Prevents scrollbars on the body itself */
+    }
+
     body {
       font-family: "Lexend", sans-serif;
       background-color: #362a2b;
       color: #e5ebf3;
     }
+
     .slider {
       position: relative;
       width: 100vw;
-      height: 100vh;
+      /* FIX 2: Use dynamic viewport height to avoid being cropped by mobile browser UI */
+      height: 100dvh; 
       overflow: hidden;
     }
+
     .slide {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       opacity: 0;
       transition: opacity 0.4s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
-    .slide.current { opacity: 1; }
-    .slide:first-child {
-      background: url("1.png") no-repeat center top/cover;
+
+    .slide.current { 
+      opacity: 1; 
+      z-index: 1;
     }
-    .slide:nth-child(2) {
-      background: url("2.png") no-repeat center top/cover;
+
+    /* Make sure your image paths are correct! */
+    .slide:first-child  { background-image: url("1.png"); }
+    .slide:nth-child(2) { background-image: url("2.png"); }
+    .slide:nth-child(3) { background-image: url("3.png"); }
+    .slide:nth-child(4) { background-image: url("4.png"); }
+    .slide:nth-child(5) { background-image: url("5.png"); }
+
+    /* Buttons are now positioned relative to the slider */
+    .buttons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2; /* Ensure buttons are on top of the slides */
     }
-    .slide:nth-child(3) {
-      background: url("3.png") no-repeat center top/cover;
-    }
-    .slide:nth-child(4) {
-      background: url("4.png") no-repeat center top/cover;
-    }
-    .slide:nth-child(5) {
-      background: url("5.png") no-repeat center top/cover;
-    }
-    .buttons button#prev {
-      position: absolute; top: 50%; left: 1rem;
-    }
-    .buttons button#next {
-      position: absolute; top: 50%; right: 1rem;
-    }
+
     .buttons button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       border: 2px solid #e5ebf3;
       background-color: transparent;
       color: #e5ebf3;
@@ -55,36 +81,32 @@
       padding: 13px 15px;
       border-radius: 50%;
       outline: none;
+      transition: background-color 0.2s, color 0.2s;
     }
+    .buttons button#prev { left: 1.5rem; }
+    .buttons button#next { right: 1.5rem; }
+
     .buttons button:hover {
       background-color: #e5ebf3;
       color: #362a2b;
     }
-    @media (min-width: 640px) and (min-height: 640px) {
-      .slide .content {
-        bottom: 70px;
-        left: -600px;
-        width: 600px;
-        padding: 2rem;
-        line-height: 1.6;
-      }
-      .slide .content h1 { font-size: 2rem; }
-      .slide.current .content { transform: translateX(600px); }
-    }
   </style>
 </head>
 <body>
+  <!-- FIX 3: Moved buttons inside the slider for better structure -->
   <div class="slider">
     <div class="slide current"></div>
     <div class="slide"></div>
     <div class="slide"></div>
     <div class="slide"></div>
     <div class="slide"></div>
+    
+    <div class="buttons">
+      <button id="prev"><i class="fas fa-arrow-left"></i></button>
+      <button id="next"><i class="fas fa-arrow-right"></i></button>
+    </div>
   </div>
-  <div class="buttons">
-    <button id="prev"><i class="fas fa-arrow-left"></i></button>
-    <button id="next"><i class="fas fa-arrow-right"></i></button>
-  </div>
+
   <script>
     const slides = document.querySelectorAll(".slide");
     const nextButton = document.getElementById("next");
