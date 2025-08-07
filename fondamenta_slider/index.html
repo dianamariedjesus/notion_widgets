@@ -15,13 +15,13 @@
     .slider {
       position: relative;
       width: 100vw;
-      height: auto;
-      overflow: auto;
+      height: 100vh;
+      overflow: hidden;
     }
     .slide {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: auto;
+      width: 100%; height: 100%;
       opacity: 0;
       transition: opacity 0.4s ease-in-out;
     }
@@ -37,6 +37,9 @@
     }
     .slide:nth-child(4) {
       background: url("4.png") no-repeat center top/cover;
+    }
+    .slide:nth-child(5) {
+      background: url("5.png") no-repeat center top/cover;
     }
     .buttons button#prev {
       position: absolute; top: 50%; left: 1rem;
@@ -73,6 +76,7 @@
 <body>
   <div class="slider">
     <div class="slide current"></div>
+    <div class="slide"></div>
     <div class="slide"></div>
     <div class="slide"></div>
     <div class="slide"></div>
