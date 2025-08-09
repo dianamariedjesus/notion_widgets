@@ -1,433 +1,429 @@
-diff --git a/fixed-slider-final.html b/fixed-slider-final.html
---- a/fixed-slider-final.html
-+++ b/fixed-slider-final.html
-@@ -0,0 +1,429 @@
-+<!DOCTYPE html>
-+<html lang="en">
-+<head>
-+  <meta charset="UTF-8">
-+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-+  <title>Full-Screen Responsive Image Slider</title>
-+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
-+  <style>
-+    @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
-+    
-+    /* CSS Custom Properties for dynamic viewport */
-+    :root {
-+      --vh: 1vh;
-+      --vw: 1vw;
-+    }
-+    
-+    * { 
-+      box-sizing: border-box; 
-+      margin: 0; 
-+      padding: 0; 
-+    }
-+    
-+    html {
-+      height: 100%;
-+      height: -webkit-fill-available;
-+      width: 100%;
-+      overflow: hidden;
-+    }
-+    
-+    body {
-+      font-family: "Lexend", sans-serif;
-+      background-color: #362a2b;
-+      color: #e5ebf3;
-+      height: 100%;
-+      height: -webkit-fill-available;
-+      width: 100%;
-+      overflow: hidden;
-+      position: fixed;
-+      top: 0;
-+      left: 0;
-+      right: 0;
-+      bottom: 0;
-+    }
-+    
-+    .slider {
-+      position: absolute;
-+      top: 0;
-+      left: 0;
-+      right: 0;
-+      bottom: 0;
-+      width: 100%;
-+      height: 100%;
-+      overflow: hidden;
-+      background-color: #362a2b;
-+    }
-+    
-+    .slide {
-+      position: absolute;
-+      top: 0; 
-+      left: 0;
-+      width: 100%; 
-+      height: 100%;
-+      opacity: 0;
-+      transition: opacity 0.4s ease-in-out;
-+      background-size: cover;
-+      background-position: center center;
-+      background-repeat: no-repeat;
-+      background-color: #362a2b;
-+    }
-+    
-+    .slide.current { 
-+      opacity: 1; 
-+    }
-+    
-+    .slide:first-child {
-+      background-image: url("1.png");
-+    }
-+    .slide:nth-child(2) {
-+      background-image: url("2.png");
-+    }
-+    .slide:nth-child(3) {
-+      background-image: url("3.png");
-+    }
-+    .slide:nth-child(4) {
-+      background-image: url("4.png");
-+    }
-+    .slide:nth-child(5) {
-+      background-image: url("5.png");
-+    }
-+    
-+    .buttons {
-+      position: absolute;
-+      top: 0;
-+      left: 0;
-+      right: 0;
-+      bottom: 0;
-+      pointer-events: none;
-+      z-index: 1000;
-+    }
-+    
-+    .buttons button {
-+      position: absolute;
-+      top: 50%;
-+      transform: translateY(-50%);
-+      border: 2px solid #e5ebf3;
-+      background-color: rgba(54, 42, 43, 0.9);
-+      color: #e5ebf3;
-+      cursor: pointer;
-+      padding: 15px 18px;
-+      border-radius: 50%;
-+      outline: none;
-+      transition: all 0.3s ease;
-+      backdrop-filter: blur(10px);
-+      pointer-events: auto;
-+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-+      z-index: 1001;
-+    }
-+    
-+    .buttons button#prev {
-+      left: 20px;
-+    }
-+    
-+    .buttons button#next {
-+      right: 20px;
-+    }
-+    
-+    .buttons button:hover {
-+      background-color: #e5ebf3;
-+      color: #362a2b;
-+      transform: translateY(-50%) scale(1.1);
-+      box-shadow: 0 6px 25px rgba(229, 235, 243, 0.3);
-+    }
-+    
-+    .buttons button:active {
-+      transform: translateY(-50%) scale(0.95);
-+    }
-+    
-+    /* Mobile optimizations */
-+    @media (max-width: 768px) {
-+      .buttons button {
-+        padding: 12px 15px;
-+      }
-+      
-+      .buttons button#prev {
-+        left: 15px;
-+      }
-+      
-+      .buttons button#next {
-+        right: 15px;
-+      }
-+    }
-+    
-+    @media (max-width: 480px) {
-+      .buttons button {
-+        padding: 10px 12px;
-+      }
-+      
-+      .buttons button#prev {
-+        left: 10px;
-+      }
-+      
-+      .buttons button#next {
-+        right: 10px;
-+      }
-+    }
-+    
-+    /* Landscape mobile fix */
-+    @media (orientation: landscape) and (max-height: 500px) {
-+      body {
-+        position: fixed;
-+        height: 100vh;
-+        height: -webkit-fill-available;
-+      }
-+    }
-+    
-+    /* Content styling if needed */
-+    @media (min-width: 640px) and (min-height: 640px) {
-+      .slide .content {
-+        position: absolute;
-+        bottom: 70px;
-+        left: -600px;
-+        width: 600px;
-+        padding: 2rem;
-+        line-height: 1.6;
-+        transition: transform 0.6s ease;
-+        background: rgba(54, 42, 43, 0.8);
-+        backdrop-filter: blur(10px);
-+        border-radius: 10px;
-+      }
-+      
-+      .slide .content h1 { 
-+        font-size: 2rem; 
-+        margin-bottom: 1rem;
-+      }
-+      
-+      .slide.current .content { 
-+        transform: translateX(600px); 
-+      }
-+    }
-+    
-+    /* Loading state */
-+    .slide::before {
-+      content: '';
-+      position: absolute;
-+      top: 50%;
-+      left: 50%;
-+      width: 40px;
-+      height: 40px;
-+      margin: -20px 0 0 -20px;
-+      border: 3px solid rgba(229, 235, 243, 0.3);
-+      border-top-color: #e5ebf3;
-+      border-radius: 50%;
-+      animation: spin 1s linear infinite;
-+      opacity: 0;
-+      transition: opacity 0.3s ease;
-+    }
-+    
-+    .slide:not(.loaded)::before {
-+      opacity: 1;
-+    }
-+    
-+    @keyframes spin {
-+      to {
-+        transform: rotate(360deg);
-+      }
-+    }
-+    
-+    /* Prevent scrolling and zooming */
-+    html, body {
-+      touch-action: pan-x pan-y;
-+      -webkit-text-size-adjust: 100%;
-+      -webkit-overflow-scrolling: touch;
-+    }
-+    
-+    /* Force full viewport on all devices */
-+    @media screen {
-+      html, body {
-+        height: 100vh !important;
-+        height: -webkit-fill-available !important;
-+      }
-+    }
-+  </style>
-+</head>
-+<body>
-+  <div class="slider" id="slider">
-+    <div class="slide current"></div>
-+    <div class="slide"></div>
-+    <div class="slide"></div>
-+    <div class="slide"></div>
-+    <div class="slide"></div>
-+  </div>
-+  
-+  <div class="buttons">
-+    <button id="prev" aria-label="Previous slide" type="button">
-+      <i class="fas fa-arrow-left"></i>
-+    </button>
-+    <button id="next" aria-label="Next slide" type="button">
-+      <i class="fas fa-arrow-right"></i>
-+    </button>
-+  </div>
-+  
-+  <script>
-+    // Aggressive viewport height fix
-+    function setViewportHeight() {
-+      const vh = window.innerHeight * 0.01;
-+      const vw = window.innerWidth * 0.01;
-+      document.documentElement.style.setProperty('--vh', `${vh}px`);
-+      document.documentElement.style.setProperty('--vw', `${vw}px`);
-+      
-+      // Force body height
-+      document.body.style.height = window.innerHeight + 'px';
-+      document.documentElement.style.height = window.innerHeight + 'px';
-+    }
-+    
-+    // Set initial viewport
-+    setViewportHeight();
-+    
-+    // Update on resize with debouncing
-+    let resizeTimer;
-+    window.addEventListener('resize', () => {
-+      clearTimeout(resizeTimer);
-+      resizeTimer = setTimeout(setViewportHeight, 100);
-+    });
-+    
-+    // Handle orientation change
-+    window.addEventListener('orientationchange', () => {
-+      setTimeout(setViewportHeight, 200);
-+    });
-+    
-+    // Prevent default scrolling behavior
-+    document.addEventListener('touchmove', (e) => {
-+      if (e.target.closest('.slide')) {
-+        e.preventDefault();
-+      }
-+    }, { passive: false });
-+    
-+    // Prevent zoom on double tap
-+    let lastTouchEnd = 0;
-+    document.addEventListener('touchend', (e) => {
-+      const now = (new Date()).getTime();
-+      if (now - lastTouchEnd <= 300) {
-+        e.preventDefault();
-+      }
-+      lastTouchEnd = now;
-+    }, false);
-+    
-+    const slides = document.querySelectorAll(".slide");
-+    const nextButton = document.getElementById("next");
-+    const prevButton = document.getElementById("prev");
-+    const slider = document.getElementById("slider");
-+    
-+    // Preload images with better error handling
-+    const imageUrls = ['1.png', '2.png', '3.png', '4.png', '5.png'];
-+    let loadedCount = 0;
-+    
-+    imageUrls.forEach((url, index) => {
-+      const img = new Image();
-+      img.onload = () => {
-+        slides[index].classList.add('loaded');
-+        loadedCount++;
-+        if (loadedCount === 1) {
-+          // Ensure first image is visible
-+          slides[0].classList.add('current');
-+        }
-+      };
-+      img.onerror = () => {
-+        console.warn(`Failed to load image: ${url}`);
-+        slides[index].classList.add('loaded');
-+        slides[index].style.backgroundColor = '#4a3c3d';
-+        slides[index].innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #e5ebf3;">Image ${index + 1}<br>Not Found</div>`;
-+      };
-+      img.src = url;
-+    });
-+    
-+    const nextSlide = () => {
-+      const current = document.querySelector(".current");
-+      current.classList.remove("current");
-+      if (current.nextElementSibling && current.nextElementSibling.classList.contains('slide')) {
-+        current.nextElementSibling.classList.add("current");
-+      } else {
-+        slides[0].classList.add("current");
-+      }
-+    };
-+
-+    const prevSlide = () => {
-+      const current = document.querySelector(".current");
-+      current.classList.remove("current");
-+      if (current.previousElementSibling && current.previousElementSibling.classList.contains('slide')) {
-+        current.previousElementSibling.classList.add("current");
-+      } else {
-+        slides[slides.length - 1].classList.add("current");
-+      }
-+    };
-+
-+    nextButton.addEventListener("click", nextSlide);
-+    prevButton.addEventListener("click", prevSlide);
-+    
-+    // Keyboard navigation
-+    document.addEventListener("keydown", (e) => {
-+      if (e.key === "ArrowLeft") {
-+        e.preventDefault();
-+        prevSlide();
-+      }
-+      if (e.key === "ArrowRight") {
-+        e.preventDefault();
-+        nextSlide();
-+      }
-+      if (e.key === "Escape") {
-+        e.preventDefault();
-+      }
-+    });
-+    
-+    // Enhanced touch/swipe support
-+    let startX = 0;
-+    let startY = 0;
-+    let endX = 0;
-+    let endY = 0;
-+    let isSwipping = false;
-+    
-+    slider.addEventListener("touchstart", (e) => {
-+      startX = e.touches[0].clientX;
-+      startY = e.touches[0].clientY;
-+      isSwipping = false;
-+    }, { passive: true });
-+    
-+    slider.addEventListener("touchmove", (e) => {
-+      if (!isSwipping) {
-+        const currentX = e.touches[0].clientX;
-+        const currentY = e.touches[0].clientY;
-+        const diffX = Math.abs(currentX - startX);
-+        const diffY = Math.abs(currentY - startY);
-+        
-+        if (diffX > diffY && diffX > 10) {
-+          isSwipping = true;
-+        }
-+      }
-+    }, { passive: true });
-+    
-+    slider.addEventListener("touchend", (e) => {
-+      if (isSwipping) {
-+        endX = e.changedTouches[0].clientX;
-+        endY = e.changedTouches[0].clientY;
-+        handleSwipe();
-+      }
-+    }, { passive: true });
-+    
-+    const handleSwipe = () => {
-+      const threshold = 50;
-+      const diffX = startX - endX;
-+      
-+      if (Math.abs(diffX) > threshold) {
-+        if (diffX > 0) {
-+          nextSlide();
-+        } else {
-+          prevSlide();
-+        }
-+      }
-+    };
-+    
-+    // Ensure first slide is loaded
-+    slides[0].classList.add('loaded');
-+    
-+    // Force initial layout
-+    setTimeout(() => {
-+      setViewportHeight();
-+    }, 100);
-+  </script>
-+</body>
-+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>Full-Screen Responsive Image Slider</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
+    
+    /* CSS Custom Properties for dynamic viewport */
+    :root {
+      --vh: 1vh;
+      --vw: 1vw;
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    html {
+      height: 100%;
+      height: -webkit-fill-available;
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      font-family: "Lexend", sans-serif;
+      background-color: #362a2b;
+      color: #e5ebf3;
+      height: 100%;
+      height: -webkit-fill-available;
+      width: 100%;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #362a2b;
+    }
+    
+    .slide {
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-color: #362a2b;
+    }
+    
+    .slide.current { 
+      opacity: 1; 
+    }
+    
+    .slide:first-child {
+      background-image: url("1.png");
+    }
+    .slide:nth-child(2) {
+      background-image: url("2.png");
+    }
+    .slide:nth-child(3) {
+      background-image: url("3.png");
+    }
+    .slide:nth-child(4) {
+      background-image: url("4.png");
+    }
+    .slide:nth-child(5) {
+      background-image: url("5.png");
+    }
+    
+    .buttons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .buttons button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 2px solid #e5ebf3;
+      background-color: rgba(54, 42, 43, 0.9);
+      color: #e5ebf3;
+      cursor: pointer;
+      padding: 15px 18px;
+      border-radius: 50%;
+      outline: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1001;
+    }
+    
+    .buttons button#prev {
+      left: 20px;
+    }
+    
+    .buttons button#next {
+      right: 20px;
+    }
+    
+    .buttons button:hover {
+      background-color: #e5ebf3;
+      color: #362a2b;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 25px rgba(229, 235, 243, 0.3);
+    }
+    
+    .buttons button:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .buttons button {
+        padding: 12px 15px;
+      }
+      
+      .buttons button#prev {
+        left: 15px;
+      }
+      
+      .buttons button#next {
+        right: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .buttons button {
+        padding: 10px 12px;
+      }
+      
+      .buttons button#prev {
+        left: 10px;
+      }
+      
+      .buttons button#next {
+        right: 10px;
+      }
+    }
+    
+    /* Landscape mobile fix */
+    @media (orientation: landscape) and (max-height: 500px) {
+      body {
+        position: fixed;
+        height: 100vh;
+        height: -webkit-fill-available;
+      }
+    }
+    
+    /* Content styling if needed */
+    @media (min-width: 640px) and (min-height: 640px) {
+      .slide .content {
+        position: absolute;
+        bottom: 70px;
+        left: -600px;
+        width: 600px;
+        padding: 2rem;
+        line-height: 1.6;
+        transition: transform 0.6s ease;
+        background: rgba(54, 42, 43, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+      }
+      
+      .slide .content h1 { 
+        font-size: 2rem; 
+        margin-bottom: 1rem;
+      }
+      
+      .slide.current .content { 
+        transform: translateX(600px); 
+      }
+    }
+    
+    /* Loading state */
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      border: 3px solid rgba(229, 235, 243, 0.3);
+      border-top-color: #e5ebf3;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .slide:not(.loaded)::before {
+      opacity: 1;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    /* Prevent scrolling and zooming */
+    html, body {
+      touch-action: pan-x pan-y;
+      -webkit-text-size-adjust: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Force full viewport on all devices */
+    @media screen {
+      html, body {
+        height: 100vh !important;
+        height: -webkit-fill-available !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="slider" id="slider">
+    <div class="slide current"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+  </div>
+  
+  <div class="buttons">
+    <button id="prev" aria-label="Previous slide" type="button">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button id="next" aria-label="Next slide" type="button">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+  
+  <script>
+    // Aggressive viewport height fix
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      const vw = window.innerWidth * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty('--vw', `${vw}px`);
+      
+      // Force body height
+      document.body.style.height = window.innerHeight + 'px';
+      document.documentElement.style.height = window.innerHeight + 'px';
+    }
+    
+    // Set initial viewport
+    setViewportHeight();
+    
+    // Update on resize with debouncing
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(setViewportHeight, 100);
+    });
+    
+    // Handle orientation change
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setViewportHeight, 200);
+    });
+    
+    // Prevent default scrolling behavior
+    document.addEventListener('touchmove', (e) => {
+      if (e.target.closest('.slide')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+    
+    // Prevent zoom on double tap
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+    
+    const slides = document.querySelectorAll(".slide");
+    const nextButton = document.getElementById("next");
+    const prevButton = document.getElementById("prev");
+    const slider = document.getElementById("slider");
+    
+    // Preload images with better error handling
+    const imageUrls = ['1.png', '2.png', '3.png', '4.png', '5.png'];
+    let loadedCount = 0;
+    
+    imageUrls.forEach((url, index) => {
+      const img = new Image();
+      img.onload = () => {
+        slides[index].classList.add('loaded');
+        loadedCount++;
+        if (loadedCount === 1) {
+          // Ensure first image is visible
+          slides[0].classList.add('current');
+        }
+      };
+      img.onerror = () => {
+        console.warn(`Failed to load image: ${url}`);
+        slides[index].classList.add('loaded');
+        slides[index].style.backgroundColor = '#4a3c3d';
+        slides[index].innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #e5ebf3;">Image ${index + 1}<br>Not Found</div>`;
+      };
+      img.src = url;
+    });
+    
+    const nextSlide = () => {
+      const current = document.querySelector(".current");
+      current.classList.remove("current");
+      if (current.nextElementSibling && current.nextElementSibling.classList.contains('slide')) {
+        current.nextElementSibling.classList.add("current");
+      } else {
+        slides[0].classList.add("current");
+      }
+    };
+
+    const prevSlide = () => {
+      const current = document.querySelector(".current");
+      current.classList.remove("current");
+      if (current.previousElementSibling && current.previousElementSibling.classList.contains('slide')) {
+        current.previousElementSibling.classList.add("current");
+      } else {
+        slides[slides.length - 1].classList.add("current");
+      }
+    };
+
+    nextButton.addEventListener("click", nextSlide);
+    prevButton.addEventListener("click", prevSlide);
+    
+    // Keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevSlide();
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextSlide();
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+      }
+    });
+    
+    // Enhanced touch/swipe support
+    let startX = 0;
+    let startY = 0;
+    let endX = 0;
+    let endY = 0;
+    let isSwipping = false;
+    
+    slider.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isSwipping = false;
+    }, { passive: true });
+    
+    slider.addEventListener("touchmove", (e) => {
+      if (!isSwipping) {
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = Math.abs(currentX - startX);
+        const diffY = Math.abs(currentY - startY);
+        
+        if (diffX > diffY && diffX > 10) {
+          isSwipping = true;
+        }
+      }
+    }, { passive: true });
+    
+    slider.addEventListener("touchend", (e) => {
+      if (isSwipping) {
+        endX = e.changedTouches[0].clientX;
+        endY = e.changedTouches[0].clientY;
+        handleSwipe();
+      }
+    }, { passive: true });
+    
+    const handleSwipe = () => {
+      const threshold = 50;
+      const diffX = startX - endX;
+      
+      if (Math.abs(diffX) > threshold) {
+        if (diffX > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    };
+    
+    // Ensure first slide is loaded
+    slides[0].classList.add('loaded');
+    
+    // Force initial layout
+    setTimeout(() => {
+      setViewportHeight();
+    }, 100);
+  </script>
+</body>
+</html>
