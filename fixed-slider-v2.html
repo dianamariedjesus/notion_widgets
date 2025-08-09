@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Full-Screen Responsive Image Slider</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap");
+    
+    :root {
+      --vh: 1vh;
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+      font-family: "Lexend", sans-serif;
+      background-color: #362a2b;
+      color: #e5ebf3;
+    }
+    
+    body {
+      position: relative;
+    }
+    
+    .slider {
+      position: relative;
+      width: 100%;
+      height: calc(var(--vh, 1vh) * 100);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .slide {
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+      background-size: contain;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-color: #362a2b;
+    }
+    
+    .slide.current { 
+      opacity: 1; 
+    }
+    
+    .slide:first-child {
+      background-image: url("1.png");
+    }
+    .slide:nth-child(2) {
+      background-image: url("2.png");
+    }
+    .slide:nth-child(3) {
+      background-image: url("3.png");
+    }
+    .slide:nth-child(4) {
+      background-image: url("4.png");
+    }
+    .slide:nth-child(5) {
+      background-image: url("5.png");
+    }
+    
+    .buttons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .buttons button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 2px solid #e5ebf3;
+      background-color: rgba(54, 42, 43, 0.9);
+      color: #e5ebf3;
+      cursor: pointer;
+      padding: 15px 18px;
+      border-radius: 50%;
+      outline: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .buttons button#prev {
+      left: 20px;
+    }
+    
+    .buttons button#next {
+      right: 20px;
+    }
+    
+    .buttons button:hover {
+      background-color: #e5ebf3;
+      color: #362a2b;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 25px rgba(229, 235, 243, 0.3);
+    }
+    
+    .buttons button:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .buttons button {
+        padding: 12px 15px;
+      }
+      
+      .buttons button#prev {
+        left: 15px;
+      }
+      
+      .buttons button#next {
+        right: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .buttons button {
+        padding: 10px 12px;
+      }
+      
+      .buttons button#prev {
+        left: 10px;
+      }
+      
+      .buttons button#next {
+        right: 10px;
+      }
+    }
+    
+    /* Force full height on all browsers */
+    @media screen and (max-height: 500px) {
+      .slider {
+        min-height: 500px;
+      }
+    }
+    
+    /* iOS specific fixes */
+    @supports (-webkit-touch-callout: none) {
+      .slider {
+        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
+      }
+    }
+    
+    /* Content styling if needed */
+    @media (min-width: 640px) and (min-height: 640px) {
+      .slide .content {
+        position: absolute;
+        bottom: 70px;
+        left: -600px;
+        width: 600px;
+        padding: 2rem;
+        line-height: 1.6;
+        transition: transform 0.6s ease;
+        background: rgba(54, 42, 43, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+      }
+      
+      .slide .content h1 { 
+        font-size: 2rem; 
+        margin-bottom: 1rem;
+      }
+      
+      .slide.current .content { 
+        transform: translateX(600px); 
+      }
+    }
+    
+    /* Loading state */
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      border: 3px solid rgba(229, 235, 243, 0.3);
+      border-top-color: #e5ebf3;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .slide:not(.loaded)::before {
+      opacity: 1;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="slider" id="slider">
+    <div class="slide current"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+    <div class="slide"></div>
+  </div>
+  
+  <div class="buttons">
+    <button id="prev" aria-label="Previous slide" type="button">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button id="next" aria-label="Next slide" type="button">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+  
+  <script>
+    // Fix viewport height issues
+    function setVH() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    
+    // Set initial vh
+    setVH();
+    
+    // Update vh on resize and orientation change
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setVH, 100);
+    });
+    
+    const slides = document.querySelectorAll(".slide");
+    const nextButton = document.getElementById("next");
+    const prevButton = document.getElementById("prev");
+    const slider = document.getElementById("slider");
+    
+    // Preload images
+    const imageUrls = ['1.png', '2.png', '3.png', '4.png', '5.png'];
+    const loadedImages = [];
+    
+    imageUrls.forEach((url, index) => {
+      const img = new Image();
+      img.onload = () => {
+        slides[index].classList.add('loaded');
+        loadedImages[index] = true;
+      };
+      img.onerror = () => {
+        console.warn(`Failed to load image: ${url}`);
+        slides[index].classList.add('loaded'); // Remove loading spinner even if image fails
+      };
+      img.src = url;
+    });
+    
+    const nextSlide = () => {
+      const current = document.querySelector(".current");
+      current.classList.remove("current");
+      if (current.nextElementSibling && current.nextElementSibling.classList.contains('slide')) {
+        current.nextElementSibling.classList.add("current");
+      } else {
+        slides[0].classList.add("current");
+      }
+    };
+
+    const prevSlide = () => {
+      const current = document.querySelector(".current");
+      current.classList.remove("current");
+      if (current.previousElementSibling && current.previousElementSibling.classList.contains('slide')) {
+        current.previousElementSibling.classList.add("current");
+      } else {
+        slides[slides.length - 1].classList.add("current");
+      }
+    };
+
+    nextButton.addEventListener("click", nextSlide);
+    prevButton.addEventListener("click", prevSlide);
+    
+    // Keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevSlide();
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextSlide();
+      }
+    });
+    
+    // Touch/swipe support
+    let startX = 0;
+    let startY = 0;
+    let endX = 0;
+    let endY = 0;
+    
+    slider.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    
+    slider.addEventListener("touchend", (e) => {
+      endX = e.changedTouches[0].clientX;
+      endY = e.changedTouches[0].clientY;
+      handleSwipe();
+    }, { passive: true });
+    
+    const handleSwipe = () => {
+      const threshold = 50;
+      const diffX = startX - endX;
+      const diffY = Math.abs(startY - endY);
+      
+      // Only handle horizontal swipes (ignore vertical scrolling)
+      if (Math.abs(diffX) > threshold && diffY < threshold * 2) {
+        if (diffX > 0) {
+          nextSlide(); // Swipe left - next slide
+        } else {
+          prevSlide(); // Swipe right - previous slide
+        }
+      }
+    };
+    
+    // Auto-advance slides (optional - remove if not wanted)
+    let autoSlideInterval;
+    const startAutoSlide = () => {
+      autoSlideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    };
+    
+    const stopAutoSlide = () => {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+      }
+    };
+    
+    // Start auto-slide
+    startAutoSlide();
+    
+    // Pause auto-slide on interaction
+    [nextButton, prevButton, slider].forEach(element => {
+      element.addEventListener('mouseenter', stopAutoSlide);
+      element.addEventListener('mouseleave', startAutoSlide);
+      element.addEventListener('touchstart', stopAutoSlide);
+    });
+    
+    // Resume auto-slide after interaction ends
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAutoSlide();
+      } else {
+        startAutoSlide();
+      }
+    });
+    
+    // Ensure first slide is marked as loaded initially
+    slides[0].classList.add('loaded');
+  </script>
+</body>
+</html>
